@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>dosdream</title>
-   <link rel="stylesheet" href="styles.css">
+  <title>DOSDream</title>
+  <link rel="stylesheet" href="styles.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="icon" type="image/png" href="Resources/favicon.png">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
   <style>
     * {
@@ -87,6 +88,16 @@
       margin-bottom: 10px;
     }
 
+    .title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25em;
+    }
+
+    .title img {
+      width: 50px;
+      height: auto;
+    }
     footer {
       text-align: center;
       padding: 20px;
@@ -97,38 +108,34 @@
   </style>
 </head>
 <body>
-
-  <header>
-    <h1>vertis</h1>
-    <nav>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
-
-  <section class="section hero">
-    <p>Programmer, Media developer</p>
-  </section>
-
-  <section>
-            <div class="social-buttons">
-            <a href="https://github.com/dipher34" target="_blank">
-                <img src="Resources/github.png" alt="github">
-            </a>
-            <a href="https://www.youtube.com/@vertis_dev" target="_blank">
-                <img src="Resources/youtube.png" alt="youtube">
-            </a>
-            <a href="https://twitter.com/varskies" target="_blank">
-                <img src="Resources/twitter.png" alt="twitter">
-            </a>
-            <a href="https://steamcommunity.com/id/varskies/" target="_blank">
-                <img src="Resources/steam.png" alt="steam">
-            </a>
-            <a href="https://bsky.app/profile/dosdream.cloud" target="_blank">
-                <img src="Resources/bluesky.png" alt="bluesky">
-            </a>
-  </section>
-  <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 10px auto;"></div>
+<header>
+  <h1 class="title">
+  vertis
+  <img src="Resources/favicon.png" alt="">
+</h1>
+</header>
+<section class="section hero">
+  <p>Programmer and Media Developer leaned towards C# projects</p>
+</section>
+<section>
+  <div class="social-buttons">
+  <a href="https://github.com/dipher34" target="_blank">
+      <img src="Resources/github.png" alt="github">
+  </a>
+  <a href="https://www.youtube.com/@vertis_dev" target="_blank">
+      <img src="Resources/youtube.png" alt="youtube">
+  </a>
+  <a href="https://twitter.com/varskies" target="_blank">
+      <img src="Resources/twitter.png" alt="twitter">
+  </a>
+  <a href="https://steamcommunity.com/id/varskies/" target="_blank">
+      <img src="Resources/steam.png" alt="steam">
+  </a>
+  <a href="https://bsky.app/profile/dosdream.cloud" target="_blank">
+      <img src="Resources/bluesky.png" alt="bluesky">
+  </a>
+</section>
+<div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 10px auto;"></div>
 <section id="projects" class="section">
   <h2>Projects</h2>
   <div class="project-grid">
@@ -142,12 +149,10 @@
         </svg>
         echorepose
       </a>
-      
     </div>
-
     <div class="project">
       <h3>DOSDream-public</h3>
-      <p>A public github repository for small, released public code.</p>
+      <p>A github repository for experimental tools and code.</p>
       <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
       <a href="/dosdreampublic" class="btn-border-to-line-text btn-border-to-line-text--gray">
         <svg width="100%" height="100%">
@@ -158,13 +163,11 @@
     </div>
   </div>
 </section>
-
-  <section id="contact" class="section">
-    <h2>Contact Me</h2>
-    Email: vertis@dosdream.cloud<br>
-    Other Platforms: varskies
-  </section>
-  
+<section id="contact" class="section">
+  <h2>Contact Me</h2>
+  Email: vertis@dosdream.cloud<br>
+  Other Platforms: varskies
+</section>
 <script>
   function showProject(num) {
     const tabs = document.querySelectorAll('.tab-content');
@@ -177,6 +180,5 @@
     });
   }
 </script>
-
 </body>
 </html>

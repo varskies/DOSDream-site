@@ -8,7 +8,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" href="Resources/favicon.png">
+  <link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js"></script>
   <style>
     * {
       box-sizing: border-box;
@@ -163,22 +166,160 @@
     </div>
   </div>
 </section>
+<section class="section">
+  <h2>GitHub Contributions</h2>
+<div id="calendar"></div>
+<div id="legend">
+  <span>Less</span>
+  <span class="legend-color" style="background:#0d0d0d"></span>
+  <span class="legend-color" style="background:#2c2c2c"></span>
+  <span class="legend-color" style="background:#4d4d4d"></span>
+  <span class="legend-color" style="background:#7d7d7d"></span>
+  <span class="legend-color" style="background:#f4f4f4"></span>
+  <span>More</span>
+</div>
+<div class="tooltip" id="tooltip"></div>
+</section>
 <section id="contact" class="section">
   <h2>Contact Me</h2>
   Email: vertis@dosdream.cloud<br>
   Other Platforms: varskies
 </section>
 <script>
-  function showProject(num) {
-    const tabs = document.querySelectorAll('.tab-content');
-    tabs.forEach((tab, i) => {
-      if (i === num - 1) {
-        tab.classList.add('active');
-      } else {
-        tab.classList.remove('active');
+const GITHUB_TOKEN = "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";
+const GITHUB_USER = "varskies";
+
+const COLORS = ["#13171c", "#405166", "#6281a8", "#76a4db", "#7db7ff"];
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+const graphQLQuery = `
+query userCalendar($login: String!) {
+  user(login: $login) {
+    contributionsCollection {
+      contributionCalendar {
+        weeks {
+          contributionDays {
+            date
+            contributionCount
+          }
+        }
+      }
+    }
+  }
+}
+`;
+
+async function getContributionData() {
+  const res = await fetch("https://api.github.com/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: "bearer " + GITHUB_TOKEN
+    },
+    body: JSON.stringify({ query: graphQLQuery, variables: { login: GITHUB_USER } })
+  });
+  const json = await res.json();
+  return json.data.user.contributionsCollection.contributionCalendar.weeks;
+}
+
+async function renderCalendar() {
+  const weeks = await getContributionData();
+  const container = document.getElementById("calendar");
+  const tooltip = document.getElementById("tooltip");
+
+  const cols = weeks.length;
+  const rows = 7;
+  const cellSize = 15;
+  const gap = 3;
+  const width = cols * (cellSize + gap) + 40;
+  const height = rows * (cellSize + gap) + 30;
+
+  let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
+
+  // Day labels on the left
+  DAYS.forEach((day,i)=>{
+    svg += `<text x="35" y="${i*(cellSize+gap)+22+cellSize/1.5}" 
+                  class="day" 
+                  font-family="'Inter', sans-serif"
+                  font-weight="400">${day}</text>`;
+  });
+
+  // Track first day of month to place month label
+  const monthLabels = {};
+  weeks.forEach((week, col) => {
+    week.contributionDays.forEach((day, row) => {
+      const date = new Date(day.date);
+      const month = date.toLocaleString('default', { month: 'short' });
+      if (!monthLabels[month] && date.getDate() <= 7) {
+        monthLabels[month] = col;
       }
     });
+  });
+
+  // Month labels on top
+  for(const [month,col] of Object.entries(monthLabels)) {
+    svg += `<text x="${col*(cellSize+gap)+40}" y="12" 
+                  class="month" 
+                  font-family="'Inter', sans-serif"
+                  font-weight="400">${month}</text>`;
   }
+
+  // Squares
+  weeks.forEach((week, col) => {
+    week.contributionDays.forEach((day, row) => {
+      const count = day.contributionCount;
+      let level = 0;
+      if (count > 0) level = Math.min(4, Math.floor(Math.log2(count + 1)));
+      const color = COLORS[level];
+
+      const x = col * (cellSize + gap) + 40;
+      const y = row * (cellSize + gap) + 20;
+
+      svg += `<rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="${color}" 
+                data-date="${day.date}" data-count="${count}"></rect>`;
+    });
+  });
+
+  svg += "</svg>";
+  container.innerHTML = svg;
+
+  // Tooltip hover with smart offset
+  container.querySelectorAll("rect").forEach(rect => {
+    rect.addEventListener("mouseenter", e => {
+      const date = e.target.dataset.date;
+      const count = e.target.dataset.count;
+      tooltip.textContent = `${count} commit${count==1?'':'s'} on ${date}`;
+      tooltip.style.opacity = 1;
+    });
+    rect.addEventListener("mousemove", e => {
+      const tooltipWidth = tooltip.offsetWidth;
+      const tooltipHeight = tooltip.offsetHeight;
+      const offset = 10;
+      let left = e.pageX + offset;
+      let top = e.pageY + offset;
+
+      // Right edge offset
+      if (e.pageX + tooltipWidth + offset > window.innerWidth) {
+        left = e.pageX - tooltipWidth - offset;
+      }
+      // Bottom edge offset
+      if (e.pageY + tooltipHeight + offset > window.innerHeight) {
+        top = e.pageY - tooltipHeight - offset;
+      }
+
+      tooltip.style.left = left + "px";
+      tooltip.style.top = top + "px";
+    });
+    rect.addEventListener("mouseleave", () => {
+      tooltip.style.opacity = 0;
+    });
+  });
+}
+
+// Wait until Inter font is fully loaded
+document.fonts.ready.then(() => {
+  renderCalendar();
+});
 </script>
 </body>
 </html>

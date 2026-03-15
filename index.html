@@ -171,7 +171,7 @@
 <div id="calendar"></div>
 <div id="legend">
   <span>Less</span>
-  <span class="legend-color" style="background:#0d0d0d"></span>
+  <span class="legend-color" style="background:#000000"></span>
   <span class="legend-color" style="background:#2c2c2c"></span>
   <span class="legend-color" style="background:#4d4d4d"></span>
   <span class="legend-color" style="background:#7d7d7d"></span>
@@ -186,10 +186,10 @@
   Other Platforms: varskies
 </section>
 <script>
-const GITHUB_TOKEN = "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";
+const GITHUB_TOKEN = "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";
 const GITHUB_USER = "varskies";
 
-const COLORS = ["#13171c", "#405166", "#6281a8", "#76a4db", "#7db7ff"];
+const COLORS = ["#000000", "#2c2c2c", "#4d4d4d", "#7d7d7d", "#f4f4f4"];
 const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
 const graphQLQuery = `
@@ -244,7 +244,6 @@ async function renderCalendar() {
                   font-weight="400">${day}</text>`;
   });
 
-  // Track first day of month to place month label
   const monthLabels = {};
   weeks.forEach((week, col) => {
     week.contributionDays.forEach((day, row) => {
@@ -256,7 +255,6 @@ async function renderCalendar() {
     });
   });
 
-  // Month labels on top
   for(const [month,col] of Object.entries(monthLabels)) {
     svg += `<text x="${col*(cellSize+gap)+40}" y="12" 
                   class="month" 
@@ -264,7 +262,6 @@ async function renderCalendar() {
                   font-weight="400">${month}</text>`;
   }
 
-  // Squares
   weeks.forEach((week, col) => {
     week.contributionDays.forEach((day, row) => {
       const count = day.contributionCount;
@@ -283,7 +280,6 @@ async function renderCalendar() {
   svg += "</svg>";
   container.innerHTML = svg;
 
-  // Tooltip hover with smart offset
   container.querySelectorAll("rect").forEach(rect => {
     rect.addEventListener("mouseenter", e => {
       const date = e.target.dataset.date;
@@ -298,11 +294,9 @@ async function renderCalendar() {
       let left = e.pageX + offset;
       let top = e.pageY + offset;
 
-      // Right edge offset
       if (e.pageX + tooltipWidth + offset > window.innerWidth) {
         left = e.pageX - tooltipWidth - offset;
       }
-      // Bottom edge offset
       if (e.pageY + tooltipHeight + offset > window.innerHeight) {
         top = e.pageY - tooltipHeight - offset;
       }
@@ -316,7 +310,6 @@ async function renderCalendar() {
   });
 }
 
-// Wait until Inter font is fully loaded
 document.fonts.ready.then(() => {
   renderCalendar();
 });

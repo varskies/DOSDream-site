@@ -210,7 +210,7 @@ query userCalendar($login: String!) {
 `;
 
 async function getContributionData() {
-  const res = await fetch("calendar.json");
+  const res = await fetch("calendar.json?v=" + Date.now());
   const weeks = await res.json();
   return weeks;
 }
@@ -228,12 +228,20 @@ async function renderCalendar() {
   const height = rows * (cellSize + gap) + 30;
 
   let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
-  
-  DAYS.forEach((day,i)=>{
-    svg += `<text x="35" y="${i*(cellSize+gap)+22+cellSize/1.5}" 
-                  class="day" 
-                  font-family="'Inter', sans-serif"
-                  font-weight="400">${day}</text>`;
+
+  const DAY_POSITIONS = [
+    {label:"Mon", row:1},
+    {label:"Wed", row:3},
+    {label:"Fri", row:5}
+  ];
+
+  DAY_POSITIONS.forEach(day=>{
+    const y = day.row * (cellSize + gap) + 22 + cellSize/1.5;
+
+    svg += `<text x="35" y="${y}"
+                class="day"
+                font-family="'Inter', sans-serif"
+                font-weight="400">${day.label}</text>`;
   });
 
   const monthLabels = {};

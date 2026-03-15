@@ -186,7 +186,6 @@
   Other Platforms: varskies
 </section>
 <script>
-const GITHUB_TOKEN = "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";
 const GITHUB_USER = "varskies";
 
 const COLORS = ["#000000", "#2c2c2c", "#4d4d4d", "#7d7d7d", "#f4f4f4"];
@@ -210,16 +209,9 @@ query userCalendar($login: String!) {
 `;
 
 async function getContributionData() {
-  const res = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: "bearer " + GITHUB_TOKEN
-    },
-    body: JSON.stringify({ query: graphQLQuery, variables: { login: GITHUB_USER } })
-  });
-  const json = await res.json();
-  return json.data.user.contributionsCollection.contributionCalendar.weeks;
+  const res = await fetch("calendar.json");
+  const weeks = await res.json();
+  return weeks;
 }
 
 async function renderCalendar() {

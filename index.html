@@ -227,6 +227,9 @@ async function renderCalendar() {
   const width = cols * (cellSize + gap) + 40;
   const height = rows * (cellSize + gap) + 30;
 
+  const allDays = weeks.flatMap(w => w.contributionDays);
+  const maxCommits = Math.max(...allDays.map(d => d.contributionCount), 1);
+
   let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
 
   const DAY_POSITIONS = [
@@ -266,7 +269,11 @@ async function renderCalendar() {
     week.contributionDays.forEach((day, row) => {
       const count = day.contributionCount;
       let level = 0;
-      if (count > 0) level = Math.min(4, Math.floor(Math.log2(count + 1)));
+
+      if (count > 0) {
+        const normalized = count / maxCommits;
+        level = Math.ceil(normalized * 4);
+      }
       const color = COLORS[level];
 
       const x = col * (cellSize + gap) + 40;

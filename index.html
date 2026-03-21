@@ -118,7 +118,7 @@
 </h1>
 </header>
 <section class="section hero">
-  <p>Programmer and Media Developer leaned towards C# projects</p>
+  <p>Programmer and Media Developer leaned towards C# and Dart + Flutter projects</p>
 </section>
 <section>
   <div class="social-buttons">
@@ -165,161 +165,22 @@
         dosdream-public
       </a>
     </div>
+    <div class ="project">
+      <h3>Github Contributions</h3>
+      <p>A graph showcasing my GitHub contribution activity.</p>
+      <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
+      <a href="/github-contributions" class="btn-border-to-line-text btn-border-to-line-text--gray">
+        <svg width="100%" height="100%">
+          <rect x="0" y="0" fill="none" width="100%" height="100%" />
+        </svg>
+        github-contributions
+      </a>
   </div>
-</section>
-<section class="section">
-  <h2>GitHub Contributions</h2>
-<div id="calendar"></div>
-<div id="legend">
-  <span>Less</span>
-  <span class="legend-color" style="background:#000000"></span>
-  <span class="legend-color" style="background:#2c2c2c"></span>
-  <span class="legend-color" style="background:#4d4d4d"></span>
-  <span class="legend-color" style="background:#7d7d7d"></span>
-  <span class="legend-color" style="background:#f4f4f4"></span>
-  <span>More</span>
-</div>
-<div class="tooltip" id="tooltip"></div>
 </section>
 <section id="contact" class="section">
   <h2>Contact Me</h2>
   Email: vertis@dosdream.cloud<br>
   All Platforms: varskies
 </section>
-<script>
-const GITHUB_USER = "varskies";
-
-const COLORS = ["#000000", "#2c2c2c", "#4d4d4d", "#7d7d7d", "#f4f4f4"];
-const DAYS = ["Mon", "Wed", "Fri"];
-
-const graphQLQuery = `
-query userCalendar($login: String!) {
-  user(login: $login) {
-    contributionsCollection {
-      contributionCalendar {
-        weeks {
-          contributionDays {
-            date
-            contributionCount
-          }
-        }
-      }
-    }
-  }
-}
-`;
-
-async function getContributionData() {
-  const res = await fetch("calendar.json?v=" + Date.now());
-  const weeks = await res.json();
-  return weeks;
-}
-
-async function renderCalendar() {
-  const weeks = await getContributionData();
-  const container = document.getElementById("calendar");
-  const tooltip = document.getElementById("tooltip");
-
-  const cols = weeks.length;
-  const rows = 7;
-  const cellSize = 15;
-  const gap = 3;
-  const width = cols * (cellSize + gap) + 40;
-  const height = rows * (cellSize + gap) + 30;
-
-  const allDays = weeks.flatMap(w => w.contributionDays);
-  const maxCommits = Math.max(...allDays.map(d => d.contributionCount), 1);
-
-  let svg = `<svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">`;
-
-  const DAY_POSITIONS = [
-    {label:"Mon", row:1},
-    {label:"Wed", row:3},
-    {label:"Fri", row:5}
-  ];
-
-  DAY_POSITIONS.forEach(day=>{
-    const y = day.row * (cellSize + gap) + 22 + cellSize/1.5;
-
-    svg += `<text x="35" y="${y}"
-                class="day"
-                font-family="'Inter', sans-serif"
-                font-weight="400">${day.label}</text>`;
-  });
-
-  const monthLabels = {};
-  weeks.forEach((week, col) => {
-    week.contributionDays.forEach((day, row) => {
-      const date = new Date(day.date);
-      const month = date.toLocaleString('default', { month: 'short' });
-      if (!monthLabels[month] && date.getDate() <= 7) {
-        monthLabels[month] = col;
-      }
-    });
-  });
-
-  for(const [month,col] of Object.entries(monthLabels)) {
-    svg += `<text x="${col*(cellSize+gap)+40}" y="12" 
-                  class="month" 
-                  font-family="'Inter', sans-serif"
-                  font-weight="400">${month}</text>`;
-  }
-
-  weeks.forEach((week, col) => {
-    week.contributionDays.forEach((day, row) => {
-      const count = day.contributionCount;
-      let level = 0;
-
-      if (count > 0) {
-        const normalized = count / maxCommits;
-        level = Math.ceil(normalized * 4);
-      }
-      const color = COLORS[level];
-
-      const x = col * (cellSize + gap) + 40;
-      const y = row * (cellSize + gap) + 20;
-
-      svg += `<rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="${color}" 
-                data-date="${day.date}" data-count="${count}"></rect>`;
-    });
-  });
-
-  svg += "</svg>";
-  container.innerHTML = svg;
-
-  container.querySelectorAll("rect").forEach(rect => {
-    rect.addEventListener("mouseenter", e => {
-      const date = e.target.dataset.date;
-      const count = e.target.dataset.count;
-      tooltip.textContent = `${count} commit${count==1?'':'s'} on ${date}`;
-      tooltip.style.opacity = 1;
-    });
-    rect.addEventListener("mousemove", e => {
-      const tooltipWidth = tooltip.offsetWidth;
-      const tooltipHeight = tooltip.offsetHeight;
-      const offset = 10;
-      let left = e.pageX + offset;
-      let top = e.pageY + offset;
-
-      if (e.pageX + tooltipWidth + offset > window.innerWidth) {
-        left = e.pageX - tooltipWidth - offset;
-      }
-      if (e.pageY + tooltipHeight + offset > window.innerHeight) {
-        top = e.pageY - tooltipHeight - offset;
-      }
-
-      tooltip.style.left = left + "px";
-      tooltip.style.top = top + "px";
-    });
-    rect.addEventListener("mouseleave", () => {
-      tooltip.style.opacity = 0;
-    });
-  });
-}
-
-document.fonts.ready.then(() => {
-  renderCalendar();
-});
-</script>
 </body>
 </html>

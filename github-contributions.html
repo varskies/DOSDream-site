@@ -25,6 +25,11 @@
       text-decoration: underline;
     }
 
+    #calendar {
+      max-width: 600px;
+      margin: 20px auto;
+    }
+
     .container {
       max-width: 800px;
       margin: auto;
@@ -66,12 +71,9 @@
   <div class="container">
     <h1>GitHub Contributions</h1>
     <p>A graph showcasing my GitHub contribution activity.</p> <br>
-    <section class="section">
-</div>
-<div id="calendar" style="margin: 20px auto; max-width: 600px;"></div>
-<div class="tooltip" id="tooltip"></div>
-</section>
-  </div>
+    </div>
+    <div id="calendar" style="margin: 20px auto; max-width: 600px;"></div>
+    <div class="tooltip" id="tooltip"></div>
 <script>const GITHUB_USER = "varskies";
 const COLORS = ["#000000", "#2c2c2c", "#4d4d4d", "#7d7d7d", "#f4f4f4"];
 const DAYS = ["Mon", "Wed", "Fri"];

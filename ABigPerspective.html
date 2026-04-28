@@ -56,6 +56,25 @@
       object-fit: contain;
     }
 
+    .link-with-arrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .arrow-symbol {
+      display: inline-block;
+      font-size: 20px;
+      margin-left: 3px;
+      animation: slideArrow 1s ease-in-out infinite;
+    }
+
+    @keyframes slideArrow {
+      0%   { transform: translateX(0); }
+      50%  { transform: translateX(-6px); }
+      100% { transform: translateX(0); }
+    }
+
     .small-image {
       width: 25%;
       height: auto;
@@ -65,7 +84,14 @@
 <body>
   <div class="container">
     <h1>A Big Perspective</h1>
-    <p>....? </p> <br>
+    <p> A Big Perspective is an upcoming unofficial level editor for the game A Little Perspective.
+    <div class="link-with-arrow">
+      <a href="https://store.steampowered.com/app/3485300/A_Little_Perspective/">
+        Check out the game here!
+      </a>
+      <span class="arrow-symbol">‹</span>
+    </div>
+    <img src="Resources/ABigPerspective.png" alt="img1" class="image-with-border" style="width: 70%;">
     <p><a href="/">Back to Main</a></p>
   </div>
 </body>

@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>EchoRepose</title>
   <link rel="icon" type="image/png" href="Resources/favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       color: #f4f4f4;
       margin: 0;
       padding: 40px;
@@ -72,6 +72,75 @@
       width: 25%;
       height: auto;
     }
+.carousel {
+    position: relative;
+    width: min(90vw, 700px);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: 20px auto;
+}
+
+.carousel img {
+    width: 100%;
+    max-height: 100vh;
+    height: 40vh;
+    object-fit: contain;
+
+    border-radius: 8px;
+    transition: opacity .25s ease;
+}
+
+.carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+
+  border: none;
+  border-radius: 50%;
+  background: rgba(20,20,20,0.75);
+  color: white;
+
+  font-size: 28px;
+  cursor: pointer;
+
+  transition: background .2s;
+  user-select: none;
+}
+
+.carousel-btn:hover {
+  background: rgba(40,40,40,0.95);
+}
+
+.prev {
+  left: -70px;
+}
+
+.next {
+  right: -70px;
+}
+
+@media (max-width: 800px) {
+
+  .prev {
+    left: 5px;
+  }
+
+  .next {
+    right: 5px;
+  }
+
+  .carousel-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+  }
+
+}
   </style>
 </head>
 <body>
@@ -84,16 +153,76 @@
         </svg>
         GDD
       </a>
-      <br> <br> 
-      <img src="Resources/echorepose.png" alt="img1" class="image-with-border" style="width: 70%;">
-      <img src="Resources/echorepose2.png" alt="img1" class="image-with-border" style="width: 70%; float: right; margin-left: 20px;">
-      <br>
-    <img src="Resources/echorepose3.png" alt="img1" class="image-with-border small-image">
-    <div style="display: flex; justify-content: center; gap: 20px; width: 100%;">
-      <img src="Resources/echorepose4.png" alt="img1" class="image-with-border" style="width: 50%;">
-    <img src="Resources/echorepose5.png" alt="img1" class="image-with-border" style="width: 50%;">
+    <div class="carousel">
+
+        <button class="carousel-btn prev">&#10094;</button>
+
+        <img id="carouselImage"
+            src="Resources/echorepose.png"
+            alt="EchoRepose Screenshot">
+
+        <button class="carousel-btn next">&#10095;</button>
+
     </div>
     <p><a href="/">Back to Main</a></p>
   </div>
 </body>
+<script>
+
+const images = [
+    "Resources/echorepose.png",
+    "Resources/echorepose2.png",
+    "Resources/echorepose4.png",
+    "Resources/echorepose5.png"
+];
+
+let currentImage = 0;
+
+const image = document.getElementById("carouselImage");
+
+function showImage(index){
+
+    image.style.opacity = 0;
+
+    setTimeout(() => {
+        image.src = images[index];
+        image.style.opacity = 1;
+    }, 150);
+
+}
+
+document.querySelector(".next").addEventListener("click", () => {
+
+    currentImage++;
+
+    if(currentImage >= images.length)
+        currentImage = 0;
+
+    showImage(currentImage);
+
+});
+
+document.querySelector(".prev").addEventListener("click", () => {
+
+    currentImage--;
+
+    if(currentImage < 0)
+        currentImage = images.length - 1;
+
+    showImage(currentImage);
+
+});
+
+// Keyboard support
+document.addEventListener("keydown", (e)=>{
+
+    if(e.key === "ArrowRight")
+        document.querySelector(".next").click();
+
+    if(e.key === "ArrowLeft")
+        document.querySelector(".prev").click();
+
+});
+
+</script>
 </html>

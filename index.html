@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="icon" type="image/png" href="Resources/favicon.png">
   <link rel="stylesheet" href="https://unpkg.com/github-calendar@latest/dist/github-calendar-responsive.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://unpkg.com/github-calendar@latest/dist/github-calendar.min.js"></script>
   <style>
@@ -20,7 +20,7 @@
     }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       background-color: #0d0d0d;
       color: #f4f4f4;
       line-height: 1.6;
@@ -49,7 +49,7 @@
     }
 
     .section {
-      padding: 60px 20px;
+      padding: 40px 20px;
       max-width: 1000px;
       margin: auto;
     }
@@ -144,8 +144,7 @@
   <div class="project-grid">
     <div class="project">
     <img src="Resources/logo5.png" style="width: 100px;">
-      <p>My current passion project. Planned to release on Steam.</p>
-      <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
+      <p style="margin-bottom: 20px">My current passion project. Planned to release on Steam.</p>
       <a href="/echorepose" class="btn-border-to-line-text btn-border-to-line-text--gray">
         <svg width="100%" height="100%">
           <rect x="0" y="0" fill="none" width="100%" height="100%" />
@@ -155,8 +154,7 @@
     </div>
     <div class="project">
     <img src="Resources/logo.png" style="width: 140px;">
-    <p>Unofficial level editor for A Little Perspective.</p>
-    <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
+    <p style="margin-bottom: 20px">Unofficial level editor for A Little Perspective.</p>
     <a href="/abp" class="btn-border-to-line-text btn-border-to-line-text--gray">
       <svg width="100%" height="100%">
         <rect x="0" y="0" fill="none" width="100%" height="100%" />
@@ -178,8 +176,7 @@
     -->
 <div class="project">
       <img src="Resources/logo2.png" style="width: 165px;">
-      <p>A github repository for experimental tools and code.</p>
-      <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
+      <p style="margin-bottom: 20px">A github repository for experimental tools and code.</p>
       <a href="/dosdreampublic" class="btn-border-to-line-text btn-border-to-line-text--gray">
         <svg width="100%" height="100%">
           <rect x="0" y="0" fill="none" width="100%" height="100%" />
@@ -190,8 +187,26 @@
 </section>
 <section id="contact" class="section">
   <h2>Contact Me</h2>
-  Email: vertis@dosdream.cloud<br>
   All Platforms: varskies
+  <div>
+    <button id="copyEmail" style="background-color: #1a1a1a; color: #f4f4f4; border: 1px solid #333; padding: 6px 6px; cursor: pointer; border-radius: 5px;">
+      <img src="Resources/copy.png" alt="Copy" style="width: 20px; vertical-align: middle; margin-right: 5px;">
+    </button>
+  Email: vertis@dosdream.cloud
+  </div>
+  <span id="copyMessage" style="color: #4e4e4e; display: none;">Copied!</span>
 </section>
 </body>
+<script>
+  document.getElementById('copyEmail').addEventListener('click', function() {
+    navigator.clipboard.writeText('vertis@dosdream.cloud')
+      .then(() => {
+        const copyMessage = document.getElementById('copyMessage');
+        copyMessage.style.display = 'inline';
+        setTimeout(() => {
+          copyMessage.style.display = 'none';
+        }, 2000);
+      })
+  });
+</script>
 </html>

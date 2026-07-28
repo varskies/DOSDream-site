@@ -6,10 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>DOSDream-public</title>
   <link rel="icon" type="image/png" href="Resources/favicon.png">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Quicksand', sans-serif;
       background: #0d0d0d;
       color: #f4f4f4;
       margin: 0;
@@ -75,6 +75,73 @@
       width: 20%;
       height: auto;
     }
+    .carousel {
+        position: relative;
+        width: min(90vw, 700px);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        margin: 20px auto;
+    }
+
+    .carousel img {
+        width: 100%;
+        max-height: 100vh;
+        height: 40vh;
+        object-fit: contain;
+
+        border-radius: 8px;
+        transition: opacity .25s ease;
+    }
+
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+
+      border: none;
+      border-radius: 50%;
+      background: rgba(20,20,20,0.75);
+      color: white;
+
+      font-size: 28px;
+      cursor: pointer;
+
+      transition: background .2s;
+      user-select: none;
+    }
+
+    .carousel-btn:hover {
+      background: rgba(40,40,40,0.95);
+    }
+
+    .prev {
+      left: -70px;
+    }
+
+    .next {
+      right: -70px;
+    }
+
+    @media (max-width: 800px) {
+      .prev {
+        left: 5px;
+      }
+
+      .next {
+        right: 5px;
+      }
+
+      .carousel-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -87,13 +154,72 @@
       </svg>
       GITHUB
     </a>
-    <br><br><br>
-    <img src="https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example.png" alt="img1" class="image-with-border" style="width: 100%; height: auto;">
-    <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
-    <img src="https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example.gif" alt="gif1" class="image-with-border" style="margin: 20px auto; width: 50%; height: auto;">
-    <div style="width: 7%; height: 2px; background-color: rgb(255, 255, 255); margin: 20px auto;"></div>
-    <img src="https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example2.gif" alt="gif2" class="image-with-border" style="width: 100%; height: auto;">
+    <div class="carousel">
+    <button class="carousel-btn prev">&#10094;</button>
+    <img id="carouselImage"
+        src="https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example.png"
+        alt="Screenshot">
+    <button class="carousel-btn next">&#10095;</button>
+    </div>
     <p><a href="/">Back to Main</a></p>
   </div>
 </body>
+<script>
+
+const images = [
+    "https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example.png",
+    "https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example.gif",
+    "https://raw.githubusercontent.com/varskies/DOSDream-public/main/Resources/Readme/Example2.gif",
+    "Resources/webhook.png"
+];
+
+let currentImage = 0;
+
+const image = document.getElementById("carouselImage");
+
+function showImage(index){
+
+    image.style.opacity = 0;
+
+    setTimeout(() => {
+        image.src = images[index];
+        image.style.opacity = 1;
+    }, 150);
+
+}
+
+document.querySelector(".next").addEventListener("click", () => {
+
+    currentImage++;
+
+    if(currentImage >= images.length)
+        currentImage = 0;
+
+    showImage(currentImage);
+
+});
+
+document.querySelector(".prev").addEventListener("click", () => {
+
+    currentImage--;
+
+    if(currentImage < 0)
+        currentImage = images.length - 1;
+
+    showImage(currentImage);
+
+});
+
+// Keyboard support
+document.addEventListener("keydown", (e)=>{
+
+    if(e.key === "ArrowRight")
+        document.querySelector(".next").click();
+
+    if(e.key === "ArrowLeft")
+        document.querySelector(".prev").click();
+
+});
+
+</script>
 </html>

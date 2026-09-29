@@ -33,6 +33,7 @@
     }
 
     .container {
+      box-sizing: border-box;
       width: 100%;
       max-width: 800px;
       background: #1a1a1a;
@@ -77,7 +78,7 @@
     }
     .carousel {
         position: relative;
-        width: min(90vw, 700px);
+      width: min(100%, 700px);
 
         display: flex;
         justify-content: center;
@@ -98,6 +99,7 @@
 
     .carousel-btn {
       position: absolute;
+      z-index: 1;
       top: 50%;
       transform: translateY(-50%);
       width: 50px;
@@ -105,7 +107,7 @@
 
       border: none;
       border-radius: 50%;
-      background: rgba(20,20,20,0.75);
+      background: #141414;
       color: white;
 
       font-size: 28px;
@@ -116,26 +118,18 @@
     }
 
     .carousel-btn:hover {
-      background: rgba(40,40,40,0.95);
+      background: #282828;
     }
 
     .prev {
-      left: -70px;
+      left: 8px;
     }
 
     .next {
-      right: -70px;
+      right: 8px;
     }
 
     @media (max-width: 800px) {
-      .prev {
-        left: 5px;
-      }
-
-      .next {
-        right: 5px;
-      }
-
       .carousel-btn {
         width: 40px;
         height: 40px;
@@ -174,41 +168,41 @@ const images = [
 ];
 
 let currentImage = 0;
+let imageChangeTimeout;
 
 const image = document.getElementById("carouselImage");
 
 function showImage(index){
 
+  clearTimeout(imageChangeTimeout);
     image.style.opacity = 0;
 
-    setTimeout(() => {
+  imageChangeTimeout = setTimeout(() => {
         image.src = images[index];
         image.style.opacity = 1;
     }, 1);
 
 }
 
-document.querySelector(".next").addEventListener("click", () => {
-
-    currentImage++;
-
-    if(currentImage >= images.length)
-        currentImage = 0;
-
+function nextImage() {
+    currentImage = (currentImage + 1) % images.length;
     showImage(currentImage);
+}
 
-});
-
-document.querySelector(".prev").addEventListener("click", () => {
-
-    currentImage--;
-
-    if(currentImage < 0)
-        currentImage = images.length - 1;
-
+function previousImage() {
+    currentImage = (currentImage - 1 + images.length) % images.length;
     showImage(currentImage);
+}
 
-});
+function listenOnPress(button, action) {
+    button.addEventListener("pointerdown", action);
+    button.addEventListener("click", (event) => {
+        if (event.detail === 0) action();
+    });
+}
+
+listenOnPress(document.querySelector(".next"), nextImage);
+listenOnPress(document.querySelector(".prev"), previousImage);
 
 // Keyboard support
 document.addEventListener("keydown", (e)=>{
